@@ -7,6 +7,8 @@ import burlap.behavior.singleagent.planning.stochastic.valueiteration.ValueItera
 import burlap.mdp.singleagent.SADomain;
 import burlap.statehashing.simple.SimpleHashableStateFactory;
 
+import static com.hessmjr.mdp.Config.*;
+
 
 class Agent {
 
@@ -25,7 +27,7 @@ class Agent {
      */
     static Planner buildAgent(SADomain domain, int maxIters) {
 
-        switch (Config.AGENT_NAME) {
+        switch (AGENT_NAME) {
             case VALUE_ITERATION:
                 return buildValueIteration(domain, maxIters);
 
@@ -36,7 +38,7 @@ class Agent {
                 return buildQLearner(domain, maxIters);
 
             default:
-                throw new IllegalArgumentException("Invalid planner requested: " + Config.AGENT_NAME);
+                throw new IllegalArgumentException("Invalid planner requested: " + AGENT_NAME);
         }
     }
 
@@ -47,7 +49,7 @@ class Agent {
      * @return ValueIteration Planner
      */
     private static Planner buildValueIteration(SADomain domain, int maxIters) {
-        return new ValueIteration(domain, Config.GAMMA, HASH_FACTORY, Config.MAX_DELTA, maxIters);
+        return new ValueIteration(domain, GAMMA, HASH_FACTORY, MAX_DELTA, maxIters);
     }
 
     /**
@@ -57,7 +59,7 @@ class Agent {
      * @return PolicyIteration Planner
      */
     private static Planner buildPolicyIteration(SADomain domain, int maxIters) {
-        return new PolicyIteration(domain, Config.GAMMA, HASH_FACTORY, Config.MAX_DELTA, maxIters, maxIters);
+        return new PolicyIteration(domain, GAMMA, HASH_FACTORY, MAX_DELTA, maxIters, maxIters);
     }
 
     /**
@@ -67,13 +69,7 @@ class Agent {
      * @return QLearning Planner
      */
     static QLearning buildQLearner(SADomain domain, int maxIters) {
-
-        // hyper params that can be tweaked with the learning agent
-        double initQ = 0.5;
-        double alpha = 0.3;
-
-        // build the new Q learning agent and setup for planning experiments
-        QLearning agent = new QLearning(domain, Config.GAMMA, HASH_FACTORY, initQ, alpha, maxIters);
+        QLearning agent = new QLearning(domain, GAMMA, HASH_FACTORY, INIT_Q_VAL, ALPHA, maxIters);
         agent.initializeForPlanning(1);
         return agent;
     }

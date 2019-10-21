@@ -18,8 +18,10 @@ class Config {
     static final boolean Q_LEARN_PLOT = false;
 
     // Agent settings
-    static final Double GAMMA = 0.99;
+    static final double GAMMA = 0.99;
     static final double MAX_DELTA = 0.0001;
+    static final double INIT_Q_VAL = 0.5;
+    static final double ALPHA = 0.3;
 
     // Domain settings
     static final double SUCCESS_RATE = 0.8;
