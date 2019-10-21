@@ -17,4 +17,10 @@ Steps necessary to re-run this application:
 
 ## Analysis
 
+- describe MDP
+- describe grid worlds
+- describe each approach 
+   - https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/lecture-notes/lecture11-6pp.pdf
+   - showcase results
+
 
