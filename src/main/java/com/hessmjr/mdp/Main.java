@@ -25,31 +25,21 @@ import java.util.List;
 import static burlap.behavior.policy.PolicyUtils.rollout;
 
 
-@SuppressWarnings("ConstantConditions")
 public class Main {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Starting experiment...");
-
-        // update these constants to decide which simulation to run
-        final int numTrials = 1_000;
-        String domainName = Domain.GRID_WORLD_SMALL;
-        String agentName = AgentFactory.Q_LEARNER;
-        boolean visualize = false;
-        boolean plot = true;
-        boolean learnerPlot = false;
-
-        System.out.println("Running domain: " + domainName);
-        System.out.println("Running agent: " + agentName);
+        System.out.println("Running domain: " + Config.DOMAIN_NAME);
+        System.out.println("Running agent: " + Config.AGENT_NAME);
 
         // build all necessary components to run a simulation
-        Domain domain = new Domain(domainName);
+        Domain domain = new Domain(Config.DOMAIN_NAME);
         SimulatedEnvironment env = new SimulatedEnvironment(domain.getSADomain(), domain.initState());
-        Planner agent = AgentFactory.buildAgent(agentName, domain.getSADomain(), domain.maxSteps());
+        Planner agent = Agent.buildAgent(domain.getSADomain(), domain.maxSteps());
         System.out.println("Enviroment setup");
 
         // create visualizer for the domain in order to interact with
-        if (visualize) {
+        if (Config.VISUALIZE) {
             domain.visualizeDomain();
             domain.visualizeValueFunction(agent);
         }
@@ -57,7 +47,7 @@ public class Main {
         // iterate based on the
         System.out.println("Starting trials...");
         List<Result> results = new ArrayList<>();
-        for (int i = 0; i < numTrials; i++) {
+        for (int i = 0; i < Config.NUM_TRIALS; i++) {
 
             // process the episode and resent when complete, log the time necessary
             long startTime = System.nanoTime();
@@ -76,27 +66,27 @@ public class Main {
         // log and plot results with these helper methods
         System.out.println("Calculating and showcasing results");
         logResults(results);
-        if (plot) {
-            plotResults(agentName, results);
+        if (Config.PLOT) {
+            plotResults(results);
         }
 
         // for a learning agent BURLAP has a visualization tool built-in
         // plots created did not add much value so not used in final paper
-        if (learnerPlot && agentName.equals(AgentFactory.Q_LEARNER)) {
+        if (Config.Q_LEARN_PLOT && Config.AGENT_NAME.equals(Agent.Q_LEARNER)) {
             System.out.println("Building learning agent visuals");
 
             LearningAgentFactory learningFactory = new LearningAgentFactory() {
                 public String getAgentName() {
-                    return agentName;
+                    return Config.AGENT_NAME;
                 }
 
                 public LearningAgent generateAgent() {
-                    return AgentFactory.buildAgent(domain.getSADomain(), domain.maxSteps());
+                    return Agent.buildQLearner(domain.getSADomain(), domain.maxSteps());
                 }
             };
 
             LearningAlgorithmExperimenter exp = new LearningAlgorithmExperimenter(env,
-                    numTrials, domain.maxSteps(), learningFactory);
+                    Config.NUM_TRIALS, domain.maxSteps(), learningFactory);
 
             exp.setUpPlottingConfiguration(500, 250, 2, 1000,
                     TrialMode.MOST_RECENT_AND_AVERAGE,
@@ -145,11 +135,10 @@ public class Main {
 
     /**
      * Helper that plots results for a simulation
-     * @param planner - String of agent's name
      * @param results - List of Results to aggregate
      */
-    private static void plotResults(String planner, List<Result> results) {
-        XYLineChart_AWT chart = new XYLineChart_AWT("Reward per trial", planner, results);
+    private static void plotResults(List<Result> results) {
+        XYLineChart_AWT chart = new XYLineChart_AWT("Reward per trial", Config.AGENT_NAME, results);
         chart.pack();
         RefineryUtilities.centerFrameOnScreen(chart);
         chart.setVisible(true);

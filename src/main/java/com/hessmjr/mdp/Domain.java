@@ -119,31 +119,18 @@ class Domain {
     private OOSADomain createGWSmall() {
         int mapSize = 11;
 
-        // establish the Success Rate of a move, the reward for reaching the goal state, and the
-        // move reward for each movement taken
-        double sucessRate = 0.8;
-        double goalReward = 5.0;
-        double moveReward = -0.1;
-
         // create 11x11 grid world using Burlap's default 4 room setup and set the success rate
         // of each move to the value determined
         this.gridWorld = new GridWorldDomain(mapSize, mapSize);
         this.gridWorld.setMapToFourRooms();
-        this.gridWorld.setProbSucceedTransitionDynamics(sucessRate);
+        this.gridWorld.setProbSucceedTransitionDynamics(Config.SUCCESS_RATE);
 
         GridWorldTerminalFunction gwtf = new GridWorldTerminalFunction(
                 this.gridWorld.getWidth() - 1,
                 this.gridWorld.getHeight() - 1
         );
 
-        // build a gride world reward function with hazards at predetermined locations
-        // set the goal, then each of 9 hazards
-        GridWorldRewardFunction gwrf = new GridWorldRewardFunction(
-                this.gridWorld.getWidth(),
-                this.gridWorld.getHeight(),
-                moveReward
-        );
-        gwrf.setReward(this.gridWorld.getWidth() - 1, this.gridWorld.getHeight() - 1, goalReward);
+        GridWorldRewardFunction gwrf = buildRewardFunction();
 
         this.gridWorld.setTf(gwtf);
         this.gridWorld.setRf(gwrf);
@@ -188,12 +175,6 @@ class Domain {
      * @return OOSADomain
      */
     private OOSADomain createGWLarge() {
-
-        double sucessRate = 0.8;
-        double goalReward = 5.0;
-        double moveReward = -0.1;
-
-        // ordered so first dimension is x
         int[][] map = new int[][] {
                 {0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0},
                 {0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0},
@@ -219,7 +200,7 @@ class Domain {
         };
 
         this.gridWorld = new GridWorldDomain(map);
-        this.gridWorld.setProbSucceedTransitionDynamics(sucessRate);
+        this.gridWorld.setProbSucceedTransitionDynamics(Config.SUCCESS_RATE);
 
         // establish the domain terminating function
         GridWorldTerminalFunction gwtf = new GridWorldTerminalFunction(
@@ -227,23 +208,17 @@ class Domain {
                 this.gridWorld.getHeight() - 1
         );
 
-        // build a gride world reward function with hazards at predetermined locations
-        // set the goal, then each of 9 hazards
-        GridWorldRewardFunction gwrf = new GridWorldRewardFunction(
-                this.gridWorld.getWidth(),
-                this.gridWorld.getHeight(),
-                moveReward
-        );
-        gwrf.setReward(this.gridWorld.getWidth() - 1, this.gridWorld.getHeight() - 1, goalReward);
-        gwrf.setReward(2, 9, -3.0 + moveReward);
-        gwrf.setReward(2, 14, -1.0 + moveReward);
-        gwrf.setReward(4, 14, -1.0 + moveReward);
-        gwrf.setReward(6, 7, -1.0 + moveReward);
-        gwrf.setReward(10, 7, -2.0 + moveReward);
-        gwrf.setReward(10, 14, -2.0 + moveReward);
-        gwrf.setReward(12, 18, -1.0 + moveReward);
-        gwrf.setReward(16, 11, -3.0 + moveReward);
-        gwrf.setReward(17, 7, -1.0 + moveReward);
+        GridWorldRewardFunction gwrf = buildRewardFunction();
+
+        gwrf.setReward(2, 9, -3.0 + Config.MOVE_REWARD);
+        gwrf.setReward(2, 14, -1.0 + Config.MOVE_REWARD);
+        gwrf.setReward(4, 14, -1.0 + Config.MOVE_REWARD);
+        gwrf.setReward(6, 7, -1.0 + Config.MOVE_REWARD);
+        gwrf.setReward(10, 7, -2.0 + Config.MOVE_REWARD);
+        gwrf.setReward(10, 14, -2.0 + Config.MOVE_REWARD);
+        gwrf.setReward(12, 18, -1.0 + Config.MOVE_REWARD);
+        gwrf.setReward(16, 11, -3.0 + Config.MOVE_REWARD);
+        gwrf.setReward(17, 7, -1.0 + Config.MOVE_REWARD);
 
         this.gridWorld.setTf(gwtf);
         this.gridWorld.setRf(gwrf);
@@ -257,5 +232,25 @@ class Domain {
 
         // finally generate the domain to use
         return this.gridWorld.generateDomain();
+    }
+
+    /**
+     * Builds Grid World reward function
+     * @return GridWorldRewardFunction
+     */
+    private GridWorldRewardFunction buildRewardFunction() {
+        GridWorldRewardFunction gwrf = new GridWorldRewardFunction(
+                this.gridWorld.getWidth(),
+                this.gridWorld.getHeight(),
+                Config.MOVE_REWARD
+        );
+
+        gwrf.setReward(
+                this.gridWorld.getWidth() - 1,
+                this.gridWorld.getHeight() - 1,
+                Config.GOAL_REWARD
+        );
+
+        return gwrf;
     }
 }
