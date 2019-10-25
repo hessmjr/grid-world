@@ -79,12 +79,25 @@ initial state with a random assumption of the domain and takes a specific action
 the domain until a near optimal policy is achieved.  Optimal policy can be achieved but as shown
 below becomes more difficult over time, depending on the discovery algorithm. 
 
-Small grid world results:
+##### Q-learning Small Grid World Results
+
+Below are the results and policy discovered by the Q-learning agent on the small grid world.  The 
+agent focused on maintaining the quickest path pretty early on through the trial which explains
+why the policy discovered only partially matches the planners above.
+
+![large grid world image](resources/reward-gws.png)
 
 ![large grid world image](resources/q-policy-gws.png)
 
-Large grid world results:
+##### Q-learning Large Grid World Results
 
-![large grid world image](resources/q-policy-gws.png)
+The large grid world, however, involves much more complexities are one very optimal path (versus
+the 2 options available on the small).  Due to this the Q-learning agent wasn't able to steadily
+achieve the maximimum reward as quickly thus allowing it to explore the domain more.  This explains
+why the policy discovered looks much more similar to the planner's.
+
+![large grid world image](resources/reward-gwl.png)
+
+![large grid world image](resources/q-policy-gwl.png)
 
 
