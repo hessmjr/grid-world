@@ -55,12 +55,36 @@ until all values are calculated, the optimal value function is discovered, and p
 throughout the policy (converged/optimal).  Value iteration is simple to implement but much more
 computationally heavy.
 
+Here is the optimal policy for the small grid world:
+
+![large grid world image](resources/policy-gws.png)
+
 
 #### Policy Iteration
+Policy iteration on the other hand involves manipulating the policy directly until the optimal 
+policy is discovered.  Policy iteration is more complicated to implement but converges much quicker
+and therefore less computationally heavy.
 
--- TODO policy
+Below is the optimal policy for the large grid world.  As you can see there is negative reward 
+squares (or hazards) that the optimal policy pushes to avoid.
 
-#### Reinforcement Learning
+![large grid world image](resources/policy-gwl.png)
+
+#### Reinforcement Learning (Q-Learning)
+Reinforcement learning involves leaning on the premise of maximizing a reward, and consequently 
+works in conjunction very well with MDP's.  For this experiment Q-learning was utilized.  Q-learning
+is a model free algorithm, i.e. does not require a model of the environment).  It starts at an 
+initial state with a random assumption of the domain and takes a specific action (based on variou
+'discovery' algorithms), remember the reward that it received.  The Q-learning agent works through
+the domain until a near optimal policy is achieved.  Optimal policy can be achieved but as shown
+below becomes more difficult over time, depending on the discovery algorithm. 
+
+Small grid world results:
+
+![large grid world image](resources/q-policy-gws.png)
+
+Large grid world results:
+
+![large grid world image](resources/q-policy-gws.png)
 
 
--- TODO Q learning image
