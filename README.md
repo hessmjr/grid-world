@@ -34,7 +34,7 @@ grid world has 4 walls with one entry point in each as well as a single start an
 This basic setup is setup to easily illustrate the effectiveness of each planning/learning method 
 as well as a good domain to test against correct implementation.
 
-- TODO image
+![small grid world image](resources/gws.png)
 
 #### Large Grid World
 The second domain analyzed is a larger much more complex of the grid world.  Consisting of a 
@@ -42,13 +42,25 @@ The second domain analyzed is a larger much more complex of the grid world.  Con
 obstacles and the same single start and finish point.  This more complex setup truly showcases
 the capabilities of the planning and learning algorithms analyzed below
 
-- TODO image
+![large grid world image](resources/gwl.png)
 
 ### Planning/Learning
-- https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/lecture-notes/lecture11-6pp.pdf
+Planning an optimal path can be done in different ways, we'll focus on value iteration and policy
+iteration.  A learning agent will then be constructed to 'discover' the optimal path and compared
+with the planners to see how close to the actual values it can get
+
+#### Value Iteration
+Value iteration involves starting a specific point (usually the end point) and working backwards
+until all values are calculated, the optimal value function is discovered, and propogated 
+throughout the policy (converged/optimal).  Value iteration is simple to implement but much more
+computationally heavy.
+
 
 #### Policy Iteration
 
-#### Value Iteration
+-- TODO policy
 
 #### Reinforcement Learning
+
+
+-- TODO Q learning image
